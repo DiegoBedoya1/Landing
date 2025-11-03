@@ -20,4 +20,28 @@ let fetchProducts = (url) => {
             };
         });
 }
-export {fetchProducts}
+
+let fetchCategories = async(url) => {
+    try{
+        const response = await fetch(url);
+        if(!response.ok){
+            throw new Error("Error on HTTP: ${response.status}");
+        }
+        else{
+            const text = await response.text();
+            const parser = new DOMParser();
+            const data = parser.parseFromString(text,"application/xml");
+            return {
+                success:true,
+                body: data
+            };
+        }
+    }
+    catch(error){
+        return {
+            success:false,
+            body: error.message
+        }
+    }
+}; 
+export {fetchProducts, fetchCategories}
